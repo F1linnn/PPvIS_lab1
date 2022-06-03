@@ -225,25 +225,29 @@ class Area():
         self.check_all_hp_in_world()
         self.display_area()
 
-    def create_animal(self):
-            row_index = int(input('Row index:'))
-            line_index = int(input('Line index:'))
+    def create_animal(self, row, line, type, sex_a):
+            #row_index = int(input('Row index:'))
+            row_index = row
+            #line_index = int(input('Line index:'))
+            line_index = line
             if row_index >= self._width or line_index >= self._len:
                 print("Line index or Row index error!")
                 return
 
-            animal_type = str(input("Input type of animal (Bison,Deer,Wolf,Rabbit,Lion):"))
+            #animal_type = str(input("Input type of animal (Bison,Deer,Wolf,Rabbit,Lion):"))
+            animal_type = str(type)
             if animal_type not in ['Bison', 'Deer', 'Rabbit', 'Lion', 'Wolf']:
                 print("Uncorrect type animal!")
-                return
-            sex = str(input("Input animal sex male - m or female - f :"))
+                return "Uncorrect type animal!"
+            #sex = str(input("Input animal sex male - m or female - f :"))
+            sex = str(sex_a)
             if sex not in ['f', 'm']:
                 print("Uncorrect sex!")
-                return
+                return "Uncorrect sex!"
             cell = self._area[row_index][line_index]
             if cell.amount_inhabitant() == 4:
-                print("Max inhabitants on plant(4/4")
-                return
+                print("Max inhabitants on cell(4/4)")
+                return "Max inhabitants on cell(4/4)"
 
             animal_type += '\n'
             animal = Animal(animal_type, sex, self._last_id, True)
@@ -251,22 +255,26 @@ class Area():
             cell.add_animal_to_cell(animal)
             print("Animal was added!")
             self.display_area()
+            return "Animal was added!"
 
-    def create_plant(self):
-            row_index = int(input('Row index:'))
-            line_index = int(input('Line index:'))
+    def create_plant(self, row, line):
+            #row_index = int(input('Row index:'))
+            row_index = int(row)
+            #line_index = int(input('Line index:'))
+            line_index = int(line)
             if row_index >= self._width or line_index >= self._len:
                 print("Line index or Row index error!")
-                return
+                return "Line index or Row index error!"
 
             cell = self._area[row_index][line_index]
             if cell.get_plant_on_cell() is not None:
                 print("This cell have a plant!")
-                return
+                return "This cell have a plant!"
             self._last_id += 1
             cell.add_plant_to_cell(self._last_id)
             print('Plant added to cell!')
             self.display_area()
+            return 'Plant added to cell!'
 
     def save_in_file(self):
         f = open("file_for_save_data.txt", 'w')
@@ -305,9 +313,15 @@ class Area():
             if key == 1:
                 self.next_step_in_world()
             elif key == 2:
-                self.create_plant()
+                row_index = int(input('Row index:'))
+                line_index = int(input('Line index:'))
+                self.create_plant(row_index,line_index)
             elif key == 3:
-                self.create_animal()
+                row_index = int(input('Row index:'))
+                line_index = int(input('Line index:'))
+                animal_type = str(input("Input type of animal (Bison,Deer,Wolf,Rabbit,Lion):"))
+                sex = str(input("Input animal sex male - m or female - f :"))
+                self.create_animal(row_index, line_index, animal_type, sex)
             elif key == 4:
                 self.save_in_file()
                 exit()
@@ -315,3 +329,5 @@ class Area():
                 exit()
             else:
                 print("Uncorrect key value. Try again.")
+
+
